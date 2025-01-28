@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        input, select, button, label {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        input[type="radio"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <form id="clientForm">
+        <h3>Formulaire Client</h3>
+
+        <!-- Nom -->
+        <label for="name">Votre nom :</label>
+        <input type="text" id="name" name="name" placeholder="Votre nom" required>
+
+        <!-- Email -->
+        <label for="email">Votre email :</label>
+        <input type="email" id="email" name="email" placeholder="Votre email" required>
+
+        <!-- Choix par liste déroulante -->
+        <label for="source">Comment nous avez-vous connus ?</label>
+        <select id="source" name="source" required>
+            <option value="" disabled selected>Choisissez une option</option>
+            <option value="Google">Google</option>
+            <option value="Bouche à oreille">Bouche à oreille</option>
+            <option value="Publicité">Publicité</option>
+            <option value="Autre">Autre</option>
+        </select>
+
+        <!-- Boutons radio -->
+        <label>Êtes-vous satisfait de nos services ?</label>
+        <label>
+            <input type="radio" name="satisfaction" value="Oui" required> Oui
+        </label>
+        <label>
+            <input type="radio" name="satisfaction" value="Non" required> Non
+        </label>
+
+        <!-- Bouton d'envoi -->
+        <button type="submit">Envoyer</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('clientForm');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+
+            try {
+                // URL de votre script Google Apps Script
+                const scriptURL = 'https://script.google.com/macros/s/ID_DU_SCRIPT/exec';
+
+                // Envoi des données via POST
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const result = await response.json();
+
+                if (result.result === 'success') {
+                    alert('Merci ! Votre réponse a été envoyée.');
+                    form.reset();
+                } else {
+                    alert(`Erreur : ${result.message}`);
+                }
+            } catch (error) {
+                alert('Une erreur est survenue lors de l\'envoi du formulaire.');
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>
